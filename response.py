@@ -1,25 +1,25 @@
-from flask import Flask, jsonify
+from flask import Flask
 import requests
 
 app = Flask(__name__)
 
-# Route để lấy danh sách người dùng từ API
-@app.route('/users', methods=['GET'])
+@app.route('/')
 def get_users():
-    url = "https://demo-rest-api-ewdl.onrender.com/users"  # API từ server khác
+    url = "https://demo-rest-api-ewdl.onrender.com/users"  # API lấy danh sách user
     response = requests.get(url)
 
     if response.status_code == 200:
         users = response.json()
-        return jsonify(users)
+        if users:
+            result = "\nDanh sách người dùng:\n"
+            for idx, user in enumerate(users, start=1):
+                result += f"{idx}. {user['name']} - {user['email']}\n"
+        else:
+            result = "\n⚠️ Chưa có dữ liệu nào được nhập!"
     else:
-        return jsonify({"error": "Lỗi khi lấy dữ liệu!", "status_code": response.status_code}), response.status_code
+        result = f"\n❌ Lỗi khi lấy dữ liệu! Mã lỗi: {response.status_code}"
 
-# Route mặc định
-@app.route('/')
-def home():
-    return "API đang chạy! Truy cập /users để lấy danh sách người dùng."
+    return f"<pre>{result}</pre>"  # Hiển thị kết quả dưới dạng văn bản trên trình duyệt
 
-# Chạy Flask server khi chạy file trực tiếp
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
