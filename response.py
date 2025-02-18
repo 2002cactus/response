@@ -11,13 +11,13 @@ def get_users():
     if response.status_code == 200:
         users = response.json()
         if users:
-            result = "\nDanh sách người dùng:\n"
+            result = "\nDanh sách người dùng:\nSTT - Tên - Email\n"
             for idx, user in enumerate(users, start=1):
-                result += f"{idx}. {user['name']} - {user['email']}\n"
+                result += f"{idx} - {user['name']} - {user['email']}\n"
         else:
-            result = "\n⚠️ Chưa có dữ liệu nào được nhập!"
+            result = "\nChưa có dữ liệu nào được nhập!"
     else:
-        result = f"\n❌ Lỗi khi lấy dữ liệu! Mã lỗi: {response.status_code}"
+        result = f"\nLỗi khi lấy dữ liệu! Mã lỗi: {response.status_code}"
 
     return f"<pre>{result}</pre>"  # Hiển thị kết quả dưới dạng văn bản trên trình duyệt
 
